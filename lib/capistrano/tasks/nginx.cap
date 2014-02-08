@@ -1,0 +1,22 @@
+namespace :load do
+  task :defaults do
+    set :puma_nginx_conf_dir, "/etc/nginx/conf.d"
+  end
+end
+
+namespace :puma do
+  namespace :nginx do
+    desc 'Config puma nginx service'
+    task :config do
+      on roles(fetch(:puma_role)) do |role|
+        @role = role
+        template_puma 'puma_nginx.conf', "#{fetch(:tmp_dir)}/nginx.conf", @role
+        sudo "mv #{fetch(:tmp_dir)}/nginx.conf #{puma_nginx_app_conf}"
+      end
+    end
+
+    def puma_nginx_app_conf
+      fetch(:puma_nginx_app_conf, "#{fetch(:puma_nginx_conf_dir)}/puma_#{fetch(:application)}.conf")
+    end
+  end
+end

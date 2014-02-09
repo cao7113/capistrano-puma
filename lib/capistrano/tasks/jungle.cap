@@ -30,6 +30,15 @@ namespace :puma do
       end
     end
 
+    desc 'Uninstall Puma jungle'
+    task :uninstall do
+      on roles(fetch(:puma_role)) do |role|
+        sudo 'update-rc.d -f puma remove'
+        sudo "rm /etc/init.d/puma"
+        sudo "rm #{fetch(:puma_run_path)}"
+      end
+    end
+
 
     def debian_install
       template_puma 'puma-deb', "#{fetch(:tmp_dir)}/puma", @role

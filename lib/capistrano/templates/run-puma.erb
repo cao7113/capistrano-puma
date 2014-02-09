@@ -1,2 +1,3 @@
 #!/bin/bash
-cd $1 && exec bundle exec puma -C config/puma.rb
+#cd $1 && exec bundle exec puma -C config/puma.rb
+cd $1 && shared_dir=`dirname $1`/shared && exec bundle exec puma -C $shared_dir/puma.rb
